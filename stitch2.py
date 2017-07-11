@@ -10,6 +10,7 @@ ratio=0.5
 reprojThresh=2.0
 #single size
 width = 1280
+ghosts = 3
 #aggregate size
 combined_height = 2000
 combined_width = 2000
@@ -117,8 +118,9 @@ if __name__ == "__main__":
   
   
   args = ["frames/%d.png"%i for i in range(0,num_frames,2)]
-  
-  imageA = imutils.resize(mask_text(cv2.imread(args[1])), width=width)
+  imageA = cv2.imread(args[1])
+  imageA = imageA[ghosts:-ghosts,ghosts:-ghosts]
+  imageA = imutils.resize(mask_text(imageA), width=width)
   
   
   Acenter = np.zeros((combined_height,combined_width,3), np.uint8)
@@ -135,6 +137,7 @@ if __name__ == "__main__":
   for i in range(2,len(args)):
     print "Image", i
     imageB = cv2.imread(args[i])
+    imageB = imageB[ghosts:-ghosts,ghosts:-ghosts]
     try:
       imageB = mask_text(imageB)
     except:
